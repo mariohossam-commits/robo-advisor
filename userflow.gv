@@ -1,0 +1,221 @@
+digraph RoboAdvisorFlow {
+    // Graph settings
+    rankdir=TB;
+    node [shape=box, style=rounded, fontname="Arial"];
+    edge [fontname="Arial", fontsize=10];
+    
+    // Color scheme
+    node [fillcolor=lightblue, style="rounded,filled"];
+    
+    // Subgraph for AI/ML Layer
+    subgraph cluster_aiml {
+        label="AI/ML Layer";
+        style=filled;
+        color=lavender;
+        fontsize=14;
+        fontname="Arial Bold";
+        
+        // Deep RL Engine
+        subgraph cluster_drl {
+            label="Deep RL Engine";
+            style=filled;
+            color=lightsteelblue;
+            
+            drl_agent [label="DRL Agent\n(PPO/A3C)", fillcolor=plum];
+            state_space [label="State Space\n(Market Data,\nPortfolio State,\nRisk Metrics)", fillcolor=plum];
+            action_space [label="Action Space\n(Buy/Sell/Hold,\nRebalance)", fillcolor=plum];
+            reward_function [label="Reward Function\n(Returns, Risk-adj,\nGoal Progress)", fillcolor=plum];
+            
+            state_space -> drl_agent;
+            drl_agent -> action_space;
+            action_space -> reward_function;
+            reward_function -> drl_agent [label="Update Policy"];
+        }
+        
+        // Portfolio Optimizer
+        mpt_optimizer [label="Portfolio Optimizer\n(MPT/Efficient Frontier)", fillcolor=palegreen];
+        mean_variance [label="Mean-Variance\nOptimization", fillcolor=palegreen];
+        efficient_frontier [label="Efficient Frontier\nCalculation", fillcolor=palegreen];
+        
+        mpt_optimizer -> mean_variance;
+        mean_variance -> efficient_frontier;
+        
+        // Risk Model
+        risk_model [label="Risk Assessment\nModel", fillcolor=lightsalmon];
+        risk_scoring [label="Risk Score\nCalculation", fillcolor=lightsalmon];
+        risk_prediction [label="Risk Profile\nPrediction", fillcolor=lightsalmon];
+        var_calculation [label="VaR/CVaR\nCalculation", fillcolor=lightsalmon];
+        
+        risk_model -> risk_scoring;
+        risk_model -> risk_prediction;
+        risk_model -> var_calculation;
+        
+        // ML Model Training
+        model_training [label="Model Training\n& Backtesting", fillcolor=khaki];
+        feature_engineering [label="Feature Engineering\n(Market Indicators,\nUser Behavior)", fillcolor=khaki];
+        
+        feature_engineering -> model_training;
+        model_training -> drl_agent [style=dashed];
+        model_training -> risk_model [style=dashed];
+    }
+    
+    // Start
+    start [label="User Lands\non Platform", shape=ellipse, fillcolor=lightgreen];
+    
+    // Authentication
+    signup [label="Sign Up /\nLog In"];
+    
+    // Onboarding
+    personal_info [label="Enter Personal\nInformation"];
+    kyc [label="KYC Verification\n(ID, Address, SSN)"];
+    kyc_review [label="KYC Under\nReview", fillcolor=lightyellow];
+    kyc_approved [label="KYC Approved", fillcolor=lightgreen];
+    kyc_rejected [label="KYC Rejected", fillcolor=lightcoral];
+    
+    // Goal Setting
+    set_goals [label="Define Financial\nGoals"];
+    goal_type [label="Select Goal Type\n(Retirement, Education,\nSavings, etc.)"];
+    goal_details [label="Enter Goal Details\n(Amount, Timeline,\nPriority)"];
+    
+    // Risk Assessment
+    risk_questionnaire [label="Complete Risk\nQuestionnaire"];
+    risk_tolerance [label="Risk Tolerance\nQuestions"];
+    risk_capacity [label="Risk Capacity\nQuestions"];
+    risk_score [label="Calculate Risk\nScore"];
+    
+    // Portfolio Creation
+    portfolio_mapping [label="Map to Model\nPortfolio"];
+    portfolio_preview [label="Review Portfolio\nAllocation"];
+    adjust_portfolio [label="Adjust Portfolio?", shape=diamond, fillcolor=lightyellow];
+    
+    // Account Setup
+    account_setup [label="Set Up\nInvestment Account"];
+    account_type [label="Select Account Type\n(Taxable, IRA, Roth)"];
+    link_bank [label="Link Bank\nAccount"];
+    initial_funding [label="Initial Deposit"];
+    
+    // Investment Projection
+    view_projection [label="View Investment\nProjection"];
+    monte_carlo [label="Monte Carlo\nSimulation"];
+    goal_feasibility [label="Check Goal\nFeasibility"];
+    adjust_goal [label="Adjust Goal?", shape=diamond, fillcolor=lightyellow];
+    
+    // Order Execution
+    confirm_investment [label="Confirm\nInvestment"];
+    create_orders [label="Create Buy\nOrders"];
+    split_orders [label="Split Orders by\nAllocation"];
+    aggregate_orders [label="Aggregate Master\nOrder"];
+    send_to_broker [label="Send to\nBroker"];
+    order_filled [label="Orders Filled", fillcolor=lightgreen];
+    
+    // Portfolio Management
+    dashboard [label="User Dashboard", fillcolor=lightcyan];
+    view_performance [label="View Portfolio\nPerformance"];
+    view_holdings [label="View Current\nHoldings"];
+    benchmark_comparison [label="Compare to\nBenchmark"];
+    
+    // Ongoing Operations
+    monthly_contribution [label="Monthly\nContribution"];
+    dividend_reinvest [label="Dividend\nReinvestment"];
+    rebalance_check [label="Check Portfolio\nDrift"];
+    needs_rebalance [label="Needs\nRebalancing?", shape=diamond, fillcolor=lightyellow];
+    rebalance_orders [label="Create Rebalance\nOrders"];
+    
+    // Fee Processing
+    monthly_fee [label="Monthly Fee\nCalculation"];
+    fee_deduction [label="Fee Deducted\nfrom Account"];
+    
+    // Withdrawals
+    request_withdrawal [label="Request\nWithdrawal"];
+    withdrawal_type [label="Full or Partial?", shape=diamond, fillcolor=lightyellow];
+    sell_holdings [label="Create Sell\nOrders"];
+    transfer_funds [label="Transfer to\nBank Account"];
+    
+    // Goal Updates
+    update_goals [label="Update Goals"];
+    reassess_risk [label="Reassess Risk\nProfile"];
+    
+    // End states
+    account_closed [label="Account Closed", shape=ellipse, fillcolor=lightcoral];
+    continue_monitoring [label="Continue\nMonitoring", shape=ellipse, fillcolor=lightgreen];
+    
+    // Flow connections
+    start -> signup;
+    signup -> personal_info;
+    personal_info -> kyc;
+    kyc -> kyc_review;
+    kyc_review -> kyc_approved [label="Approved"];
+    kyc_review -> kyc_rejected [label="Rejected"];
+    kyc_rejected -> personal_info [label="Resubmit"];
+    
+    kyc_approved -> set_goals;
+    set_goals -> goal_type;
+    goal_type -> goal_details;
+    goal_details -> risk_questionnaire;
+    
+    risk_questionnaire -> risk_tolerance;
+    risk_tolerance -> risk_capacity;
+    risk_capacity -> risk_score;
+    
+    risk_score -> portfolio_mapping;
+    portfolio_mapping -> portfolio_preview;
+    portfolio_preview -> adjust_portfolio;
+    adjust_portfolio -> goal_details [label="Yes"];
+    adjust_portfolio -> account_setup [label="No"];
+    
+    account_setup -> account_type;
+    account_type -> link_bank;
+    link_bank -> initial_funding;
+    
+    initial_funding -> view_projection;
+    view_projection -> monte_carlo;
+    monte_carlo -> goal_feasibility;
+    goal_feasibility -> adjust_goal;
+    adjust_goal -> goal_details [label="Yes"];
+    adjust_goal -> confirm_investment [label="No"];
+    
+    confirm_investment -> create_orders;
+    create_orders -> split_orders;
+    split_orders -> aggregate_orders;
+    aggregate_orders -> send_to_broker;
+    send_to_broker -> order_filled;
+    
+    order_filled -> dashboard;
+    dashboard -> view_performance;
+    dashboard -> view_holdings;
+    dashboard -> benchmark_comparison;
+    dashboard -> monthly_contribution;
+    dashboard -> request_withdrawal;
+    dashboard -> update_goals;
+    
+    view_performance -> dashboard;
+    view_holdings -> dashboard;
+    benchmark_comparison -> dashboard;
+    
+    monthly_contribution -> create_orders;
+    
+    dividend_reinvest -> rebalance_check;
+    monthly_fee -> fee_deduction;
+    fee_deduction -> dashboard;
+    
+    rebalance_check -> needs_rebalance;
+    needs_rebalance -> rebalance_orders [label="Yes"];
+    needs_rebalance -> continue_monitoring [label="No"];
+    rebalance_orders -> aggregate_orders;
+    
+    request_withdrawal -> withdrawal_type;
+    withdrawal_type -> sell_holdings [label="Full/Partial"];
+    sell_holdings -> transfer_funds;
+    transfer_funds -> dashboard [label="Partial"];
+    transfer_funds -> account_closed [label="Full"];
+    
+    update_goals -> reassess_risk;
+    reassess_risk -> risk_questionnaire;
+    
+    continue_monitoring -> dashboard [style=dashed];
+    
+    // Periodic processes (shown with dashed lines)
+    dashboard -> dividend_reinvest [style=dashed, label="Auto"];
+    dashboard -> monthly_fee [style=dashed, label="Monthly"];
+    dashboard -> rebalance_check [style=dashed, label="Periodic"];
+}
